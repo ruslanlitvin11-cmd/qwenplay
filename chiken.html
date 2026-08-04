@@ -278,8 +278,8 @@
 			let clickSound, coinsSound, victorySound, winSound;
 			let dialogSound, smsSound;
 
-			let currentBalance = INITIAL_BALANCE;
-			let currentCashOut = INITIAL_BALANCE;
+			let currentBalance = 20;
+			let currentCashOut = 20;
 
 			const PLAY_BUTTON_TEXT = "Start";
 			const BALANCE_BOX_TEXT = "Balance";
@@ -304,14 +304,14 @@
 			const SECOND_DIALOG_LINE_THREE_TEXT_SIZE = "0px";
 
 			const CURRENCY_SYMBOL = "$";
-			const INITIAL_BALANCE = 20;
-			const BET_AMOUNT = 20;
-			const MULTIPLIERS = [1.5, 2.5, 5.0, 12.0, 50.0];
+			const WIN_BALANCE_AMOUNT = [120, 350, 850, 1500, 2500];
+			const WIN_CASH_OUT_AMOUNT = [20, 90, 420, 1500, 2500];
+
 			// --- FINAL WIN DIALOG (shown over the last coin animation) ---
 			// Edit the texts / sizes / colors below to restyle the win popup.
 			const WIN_DIALOG_TITLE_TEXT = "Result";
 			const WIN_DIALOG_MULTIPLIER_TEXT = "X50.00";
-			const WIN_DIALOG_AMOUNT_TEXT = "$1000";
+			const WIN_DIALOG_AMOUNT_TEXT = "$60";
 
 			const WIN_DIALOG_TITLE_TEXT_SIZE = "80px";
 			const WIN_DIALOG_MULTIPLIER_TEXT_SIZE = "120px";
@@ -546,8 +546,8 @@
 				scene.children.removeAll(true);
 				// reset game state
 				clickCount = 0;
-				currentBalance = INITIAL_BALANCE;
-				currentCashOut = INITIAL_BALANCE;
+				currentBalance = 20;
+				currentCashOut = 20;
 				isDialogShowing = false;
 				gameScreenObjects = [];
 				endingScreenObjects = [];
@@ -652,26 +652,26 @@
 						updateBalanceText(
 							scene,
 							0,
-							BET_AMOUNT * MULTIPLIERS[clickCount - 1],
+							WIN_BALANCE_AMOUNT[clickCount - 1],
 						);
 						scene.time.delayedCall(300, () => {
 							updateCashOutText(
 								scene,
 								20,
-								BET_AMOUNT * MULTIPLIERS[clickCount - 1],
+								WIN_CASH_OUT_AMOUNT[clickCount - 1],
 							);
 						});
 					} else {
 						updateBalanceText(
 							scene,
-							BET_AMOUNT * MULTIPLIERS[clickCount - 2],
-							BET_AMOUNT * MULTIPLIERS[clickCount - 1],
+							WIN_BALANCE_AMOUNT[clickCount - 2],
+							WIN_BALANCE_AMOUNT[clickCount - 1],
 						);
 						scene.time.delayedCall(300, () => {
 							updateCashOutText(
 								scene,
-								BET_AMOUNT * MULTIPLIERS[clickCount - 2],
-								BET_AMOUNT * MULTIPLIERS[clickCount - 1],
+								WIN_CASH_OUT_AMOUNT[clickCount - 2],
+								WIN_CASH_OUT_AMOUNT[clickCount - 1],
 							);
 						});
 					}
@@ -702,7 +702,7 @@
 
 				// Second line of text
 				const btnText2 = scene.add
-					.text(0, 40, BET_AMOUNT * MULTIPLIERS[clickCount] + CURRENCY_SYMBOL, {
+					.text(0, 40, currentCashOut + CURRENCY_SYMBOL, {
 						...labelStyleButton,
 						fontSize: "74px",
 						color: "#ffffff",
@@ -813,7 +813,7 @@
 						.text(
 							balanceBoxCenterX - 195,
 							balanceBoxCenterY - 5,
-							INITIAL_BALANCE + CURRENCY_SYMBOL,
+							currentBalance + CURRENCY_SYMBOL,
 							{ ...labelStyleScore, fontSize: 54 },
 						)
 						.setOrigin(0, 0.5)
@@ -910,7 +910,7 @@
 						.text(
 							balanceBoxCenterX - 200,
 							balanceBoxCenterY - 10,
-							INITIAL_BALANCE + CURRENCY_SYMBOL,
+							currentBalance + CURRENCY_SYMBOL,
 							{
 								...labelStyleScore,
 								fontSize: 56,
@@ -1521,12 +1521,12 @@
 
 			function updateBalanceText(scene, startValue, endValue) {
 				animateText(scene, balanceText, startValue, endValue);
-				currentBalance = INITIAL_BALANCE * MULTIPLIERS[clickCount - 1];
+				currentBalance = endValue;
 			}
 
 			function updateCashOutText(scene, startValue, endValue) {
 				animateText(scene, cashOutText, startValue, endValue);
-				currentCashOut = INITIAL_BALANCE * MULTIPLIERS[clickCount - 1];
+				currentCashOut = endValue;
 			}
 
 			function animateText(scene, textItem, startValue, endValue) {
